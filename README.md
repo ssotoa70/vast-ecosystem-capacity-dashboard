@@ -10,7 +10,7 @@ A Grafana dashboard for monitoring storage capacity across an entire VAST Data e
 
 Built for the scenario where a single user has access to several VAST clusters, belongs to different tenants in each, and needs to see their aggregate storage footprint alongside per-view breakdowns.
 
-![Dashboard Screenshot](docs/dashboard-screenshot.png)
+![Dashboard Screenshot](docs/dashboard-screenshot-2.png)
 
 ## What It Shows
 

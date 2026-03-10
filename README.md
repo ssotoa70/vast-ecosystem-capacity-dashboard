@@ -44,9 +44,30 @@ VAST Cluster B ──┘                          └── Cascading filters
 - VAST returns `vast_view_logical_capacity` and `vast_view_physical_capacity` gauges with labels: `cluster`, `tenant_name`, `path`
 - **Grafana** reads from Prometheus and uses `label_values()` to populate the cascading dropdowns
 
+## Already Have Prometheus + Grafana?
+
+You only need **two files** from this repo:
+
+1. **Copy the scrape jobs** from `prometheus.yml` into your existing Prometheus config — one job per (cluster, tenant). Change 5 fields per job, reload Prometheus.
+2. **Import `vast-tenant-capacity-dashboard.json`** into Grafana — Dashboards > New > Import, pick your Prometheus datasource, done.
+
+That's it. Everything else in this repo (docker-compose, mock exporter, provisioning) is only for the self-contained demo.
+
+### What to change per scrape job
+
+| Field | What to set |
+|-------|-------------|
+| `job_name` | Unique name, e.g. `prod-east-vfx` |
+| `targets` | VMS VIP + port, e.g. `['10.1.0.10:443']` |
+| `X-Tenant-Name` | Tenant name in VAST, e.g. `vfx` |
+| `username` | Tenant Admin username |
+| `password` | Tenant Admin password |
+
+See the full **[Deployment Guide](docs/DEPLOYMENT.md)** for a worked example with 2 clusters and 4 tenants.
+
 ## Quick Start (Demo with Mock Data)
 
-Try the dashboard instantly with simulated data (2 clusters, 4 tenants, 11 views):
+Try the dashboard instantly with simulated data (2 clusters, 4 tenants, 11 views) — no VAST cluster needed:
 
 ```bash
 git clone https://github.com/ssotoa70/vast-ecosystem-capacity-dashboard.git
@@ -57,26 +78,6 @@ docker compose up -d
 Open http://localhost:3000/d/vast-ecosystem-capacity (login: `admin` / `admin`).
 
 To stop: `docker compose down`
-
-## Deploy to Your Environment
-
-See the full **[Deployment Guide](docs/DEPLOYMENT.md)** for step-by-step instructions.
-
-**TL;DR:**
-
-1. Edit `prometheus.yml` — one scrape job per (cluster, tenant), change 5 fields per job:
-
-   | Field | What to set |
-   |-------|-------------|
-   | `job_name` | Unique name, e.g. `prod-east-vfx` |
-   | `targets` | VMS VIP + port, e.g. `['10.1.0.10:443']` |
-   | `X-Tenant-Name` | Tenant name in VAST, e.g. `vfx` |
-   | `username` | Tenant Admin username |
-   | `password` | Tenant Admin password |
-
-2. Start Prometheus: `prometheus --config.file=prometheus.yml`
-3. Import `vast-tenant-capacity-dashboard.json` in Grafana
-4. Select your Prometheus datasource and click Import
 
 ## Files
 

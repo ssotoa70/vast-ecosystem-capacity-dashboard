@@ -2,6 +2,17 @@
 
 Step-by-step guide to deploy the VAST Ecosystem Capacity Dashboard in your environment.
 
+## Already Have Prometheus + Grafana?
+
+If you already have Prometheus and Grafana running, you only need two things from this repo:
+
+1. **`prometheus.yml`** — Copy the `scrape_configs` job blocks into your **existing** `prometheus.yml`. One job per (cluster, tenant) pair. Change 5 fields per job (see below), then reload Prometheus.
+2. **`vast-tenant-capacity-dashboard.json`** — Import this file in Grafana: **Dashboards > New > Import**, select your Prometheus datasource, click Import. Done.
+
+You do **not** need `docker-compose.yml`, `provisioning/`, or `mock/` — those are only for the self-contained demo.
+
+---
+
 ## Prerequisites
 
 | Requirement | Minimum Version | Notes |
@@ -18,9 +29,9 @@ You also need:
 
 ---
 
-## Step 1: Configure Prometheus
+## Step 1: Add Scrape Jobs to Prometheus
 
-Open `prometheus.yml`. There is **one scrape job per (cluster, tenant) combination**.
+Open your existing `prometheus.yml` (or use the template from this repo). Add **one scrape job per (cluster, tenant) combination** under `scrape_configs:`.
 
 ### What to change per job
 

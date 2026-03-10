@@ -1,0 +1,125 @@
+# Prometheus configuration for VAST ecosystem-wide capacity monitoring
+#
+# Pattern: one scrape job per (cluster, tenant) combination.
+# Each job uses tenant-scoped credentials + X-Tenant-Name header.
+# The "cluster" label from VAST metrics distinguishes clusters automatically.
+#
+# To add a new cluster or tenant: copy a job block, update the 5 fields marked EDIT.
+#
+# VAST exposes these capacity metrics from /api/prometheusmetrics/views:
+#   vast_view_logical_capacity   — data written by clients
+#   vast_view_physical_capacity  — storage consumed after data reduction
+#   Labels: cluster, tenant_name, path
+#
+# Scrape intervals: 120s scrape / 90s timeout per VAST CSP guide recommendation.
+
+global:
+  scrape_interval: 1m
+
+scrape_configs:
+
+  # =====================================================================
+  # CLUSTER 1
+  # =====================================================================
+
+  # Cluster 1 — Tenant A
+  - job_name: 'cluster1-tenant-a'                    # EDIT: unique job name
+    scheme: https
+    scrape_interval: 120s
+    scrape_timeout: 90s
+    metrics_path: '/api/prometheusmetrics/views'
+    static_configs:
+      - targets: ['CLUSTER1_VMS_HOST:443']            # EDIT: cluster 1 VMS VIP
+    http_headers:
+      X-Tenant-Name:
+        values:
+          - "tenant-A"                                # EDIT: tenant name in VAST
+    basic_auth:
+      username: 'CLUSTER1_TENANT_A_USER'              # EDIT: tenant admin username
+      password: 'CLUSTER1_TENANT_A_PASS'              # EDIT: tenant admin password
+    tls_config:
+      insecure_skip_verify: true
+
+  # Cluster 1 — Tenant B
+  - job_name: 'cluster1-tenant-b'
+    scheme: https
+    scrape_interval: 120s
+    scrape_timeout: 90s
+    metrics_path: '/api/prometheusmetrics/views'
+    static_configs:
+      - targets: ['CLUSTER1_VMS_HOST:443']
+    http_headers:
+      X-Tenant-Name:
+        values:
+          - "tenant-B"
+    basic_auth:
+      username: 'CLUSTER1_TENANT_B_USER'
+      password: 'CLUSTER1_TENANT_B_PASS'
+    tls_config:
+      insecure_skip_verify: true
+
+  # Cluster 1 — Tenant C
+  - job_name: 'cluster1-tenant-c'
+    scheme: https
+    scrape_interval: 120s
+    scrape_timeout: 90s
+    metrics_path: '/api/prometheusmetrics/views'
+    static_configs:
+      - targets: ['CLUSTER1_VMS_HOST:443']
+    http_headers:
+      X-Tenant-Name:
+        values:
+          - "tenant-C"
+    basic_auth:
+      username: 'CLUSTER1_TENANT_C_USER'
+      password: 'CLUSTER1_TENANT_C_PASS'
+    tls_config:
+      insecure_skip_verify: true
+
+  # =====================================================================
+  # CLUSTER 2
+  # =====================================================================
+
+  # Cluster 2 — Tenant A
+  - job_name: 'cluster2-tenant-a'
+    scheme: https
+    scrape_interval: 120s
+    scrape_timeout: 90s
+    metrics_path: '/api/prometheusmetrics/views'
+    static_configs:
+      - targets: ['CLUSTER2_VMS_HOST:443']
+    http_headers:
+      X-Tenant-Name:
+        values:
+          - "tenant-A"
+    basic_auth:
+      username: 'CLUSTER2_TENANT_A_USER'
+      password: 'CLUSTER2_TENANT_A_PASS'
+    tls_config:
+      insecure_skip_verify: true
+
+  # Cluster 2 — Tenant B
+  - job_name: 'cluster2-tenant-b'
+    scheme: https
+    scrape_interval: 120s
+    scrape_timeout: 90s
+    metrics_path: '/api/prometheusmetrics/views'
+    static_configs:
+      - targets: ['CLUSTER2_VMS_HOST:443']
+    http_headers:
+      X-Tenant-Name:
+        values:
+          - "tenant-B"
+    basic_auth:
+      username: 'CLUSTER2_TENANT_B_USER'
+      password: 'CLUSTER2_TENANT_B_PASS'
+    tls_config:
+      insecure_skip_verify: true
+
+  # =====================================================================
+  # ADD MORE CLUSTERS / TENANTS
+  # =====================================================================
+  # Copy any job block above and change the 5 EDIT fields:
+  #   job_name, targets, X-Tenant-Name, username, password
+  # The "cluster" label in VAST metrics auto-identifies which cluster
+  # the data comes from — no need for relabeling.

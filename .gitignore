@@ -1,0 +1,7 @@
+node_modules/
+mock/node_modules/
+mock/package.json
+mock/package-lock.json
+mock/screenshot.mjs
+.DS_Store
+.claude/

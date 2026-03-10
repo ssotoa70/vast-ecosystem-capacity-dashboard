@@ -1,0 +1,11 @@
+apiVersion: 1
+providers:
+  - name: 'VAST Ecosystem'
+    orgId: 1
+    folder: 'VAST'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

@@ -47,7 +47,7 @@ VAST Cluster B ──┘                          └── Cascading filters
 Try the dashboard instantly with simulated data (2 clusters, 4 tenants, 11 views):
 
 ```bash
-git clone https://github.com/sergiosoto/vast-ecosystem-capacity-dashboard.git
+git clone https://github.com/ssotoa70/vast-ecosystem-capacity-dashboard.git
 cd vast-ecosystem-capacity-dashboard
 docker compose up -d
 ```
